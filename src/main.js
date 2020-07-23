@@ -20,6 +20,19 @@ import App from './App.vue'
 import router from './router'
 import './registerServiceWorker'
 import ArgonDashboard from './plugins/argon-dashboard'
+import tesla from './service/tesla'
+import openweather from './service/openweather'
+import wunderground from './service/weather-underground'
+import solaredgeWeb from './service/solaredge-web'
+import solaredgeApi from '@/service/solaredge-api'
+import 'weather-icons2/css/weather-icons.min.css'
+import 'weather-icons2/css/weather-icons-wind.min.css'
+
+tesla.init()
+openweather.init()
+wunderground.init()
+solaredgeWeb.init()
+solaredgeApi.init()
 
 Vue.config.productionTip = false
 

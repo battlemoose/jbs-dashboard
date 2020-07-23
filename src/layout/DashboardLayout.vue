@@ -2,24 +2,22 @@
   <div class="wrapper" :class="{ 'nav-open': $sidebar.showSidebar }">
     <side-bar
       :background-color="sidebarBackground"
-      short-title="Argon"
-      title="Argon"
+      short-title="Jbs Dashboard"
+      title="Jbs Dashboard"
     >
       <template slot="links">
         <sidebar-item
           :link="{
             name: 'Dashboard',
-            icon: 'ni ni-tv-2 text-primary',
+            icon: 'fa fa-desktop text-primary',
             path: '/dashboard'
           }"
         />
 
-        <sidebar-item :link="{name: 'Icons', icon: 'ni ni-planet text-blue', path: '/icons'}"/>
-        <sidebar-item :link="{name: 'Maps', icon: 'ni ni-pin-3 text-orange', path: '/maps'}"/>
-        <sidebar-item :link="{name: 'User Profile', icon: 'ni ni-single-02 text-yellow', path: '/profile'}"/>
-        <sidebar-item :link="{name: 'Tables', icon: 'ni ni-bullet-list-67 text-red', path: '/tables'}"/>
-        <sidebar-item :link="{name: 'Login', icon: 'ni ni-key-25 text-info', path: '/login'}"/>
-        <sidebar-item :link="{name: 'Register', icon: 'ni ni-circle-08 text-pink', path: '/register'}"/>
+        <sidebar-item :link="{name: 'Tesla', icon: 'fa fa-car text-orange', path: '/tesla'}"/>
+        <sidebar-item :link="{name: 'Weather', icon: 'fa fa-cloud-sun text-yellow', path: '/weather'}"/>
+        <sidebar-item :link="{name: 'Power', icon: 'fa fa-bolt text-green', path: '/'}" coming-soon/>
+        <sidebar-item :link="{name: 'Pool', icon: 'fa fa-swimmer text-info', path: '/'}" coming-soon/>
 
       </template>
     </side-bar>

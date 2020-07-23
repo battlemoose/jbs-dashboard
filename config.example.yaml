@@ -1,0 +1,16 @@
+teslaOptions:
+  authToken: 
+  vehicleID: 0000000000
+
+openWeatherOptions:
+  appid: 
+
+wundergroundOptions:
+  apiKey: 
+
+solaredgeOptions:
+  api_key: 
+
+solaredgeWebOptions:
+  username: abcd%40example.com
+  password: 

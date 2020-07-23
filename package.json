@@ -1,27 +1,39 @@
 {
-  "name": "vue-argon-dashboard",
+  "name": "jbs-dashboard",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "dev": "vue-cli-service serve",
+    "electron:build": "vue-cli-service electron:build",
+    "electron:serve": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps"
   },
+  "main": "background.js",
   "dependencies": {
+    "axios": "^0.19.2",
     "bootstrap": "4.5.0",
     "bootstrap-vue": "2.15.0",
+    "change-case": "^4.1.1",
     "chart.js": "2.9.3",
     "core-js": "3.6.5",
+    "dayjs": "^1.8.29",
     "flatpickr": "4.6.3",
+    "fs": "0.0.1-security",
     "nouislider": "14.6.0",
     "register-service-worker": "1.7.1",
+    "suncalc": "^1.8.0",
+    "teslajs": "^4.7.8",
     "vue": "2.6.11",
     "vue-chartjs": "3.5.0",
     "vue-clipboard2": "0.3.1",
     "vue-flatpickr-component": "8.1.5",
     "vue-router": "3.3.4",
-    "vue2-transitions": "0.3.0"
+    "vue2-transitions": "0.3.0",
+    "weather-icons2": "2.0.10"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^4.4.6",
@@ -29,10 +41,14 @@
     "@vue/cli-plugin-pwa": "^4.4.6",
     "@vue/cli-service": "^4.4.6",
     "babel-eslint": "^10.1.0",
+    "electron": "^9.0.0",
+    "electron-devtools-installer": "^3.1.0",
     "eslint": "^7.3.1",
     "eslint-plugin-vue": "^6.2.2",
     "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
+    "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
+    "vue-cli-plugin-yaml": "^1.0.2",
     "vue-template-compiler": "2.6.11"
   },
   "eslintConfig": {

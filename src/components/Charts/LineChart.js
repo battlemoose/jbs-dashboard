@@ -20,9 +20,10 @@ export default {
     this.$watch(
       'chartData',
       (newVal, oldVal) => {
-        if (!oldVal) {
+        newVal; oldVal
+        // if (!oldVal) {
           this.renderChart(this.chartData, this.extraOptions);
-        }
+        // }
       },
       { immediate: true }
     );

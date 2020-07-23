@@ -1,5 +1,8 @@
 const webpack = require('webpack');
-const isProd = process.env.NODE_ENV === "production";
+const config = require('./compile-config')
+// const isProd = process.env.NODE_ENV === "production";
+
+process.env.VUE_APP_GOOGLE_API_KEY = config.googleApiOptions.apiKey
 
 module.exports = {
   configureWebpack: {
@@ -11,7 +14,7 @@ module.exports = {
     ]
   },
   pwa: {
-    name: 'Vue Argon Dashboard',
+    name: 'JBs Dashboard',
     themeColor: '#172b4d',
     msTileColor: '#172b4d',
     appleMobileWebAppCapable: 'yes',

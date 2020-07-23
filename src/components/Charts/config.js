@@ -1,3 +1,5 @@
+import * as dayjs from 'dayjs'
+
 import { parseOptions } from "@/components/Charts/optionHelpers";
 
 export const Charts = {
@@ -118,12 +120,11 @@ function chartOptions(Chart) {
       zeroLineBorderDashOffset: [2]
     },
     ticks: {
-      beginAtZero: true,
       padding: 10,
       callback: function (value) {
-        if (!(value % 10)) {
+        // if (!(value % 10)) {
           return value
-        }
+        // }
       }
     }
   });
@@ -155,6 +156,7 @@ export const basicOptions = {
   },
   responsive: true
 };
+
 export let blueChartOptions = {
   scales: {
     yAxes: [{
@@ -164,13 +166,84 @@ export let blueChartOptions = {
       },
       ticks: {
         callback: function(value) {
-          if (!(value % 10)) {
-            return '$' + value + 'k';
-          }
-        }
+          return value + '°C'
+        },
+        autoSkip: true,
+        autoSkipPadding: 30,
+      },
+    }],
+    xAxes: [
+      {
+        type: "category",
+        ticks: {
+          callback: tickLabelTime
+        },
+      },
+      {
+        type: "category",
+        ticks: {
+          autoSkip: false,
+          callback: tickLabelDay
+        },
+      },
+    ]
+  },
+  tooltips: {
+    callbacks: {
+      title: (tooltipItems, data) => {
+        data
+        return dayjs(tooltipItems[0].label).format('ddd D MMM h:mm a')
       }
-    }]
+    }
   }
+};
+
+export let rainfallChartOptions = {
+  scales: {
+    yAxes: [{
+      gridLines: {
+        color: Charts.colors.gray[700],
+        zeroLineColor: Charts.colors.gray[700]
+      },
+      ticks: {
+        callback: function (value) {
+          return value + ' mm'
+        },
+        autoSkip: true,
+        autoSkipPadding: 30,
+      },
+    }],
+    xAxes: [
+      {
+        type: "category",
+        ticks: {
+          callback: label => {
+            return dayjs(label).format('h:mm a')
+          }
+        },
+      },
+      {
+        type: "category",
+        ticks: {
+          autoSkip: false,
+          callback: tickLabelDay
+        },
+      },
+    ]
+  },
+  tooltips: {
+    callbacks: {
+      title: (tooltipItems, data) => {
+        data
+        return dayjs(tooltipItems[0].label).format('ddd D MMM h:mm a')
+      }
+    }
+  },
+  elements: {
+    rectangle: {
+      backgroundColor: Charts.colors.theme['info']
+    },
+  },
 };
 
 export let lineChartOptionsBlue = {
@@ -496,3 +569,53 @@ export let barChartOptions = {
     ]
   }
 };
+
+export let forecastChartOptions = {
+  scales: {
+    yAxes: [{
+      ticks: {
+        callback: function (value) {
+          return value + ' °C'
+        },
+        autoSkip: true,
+        autoSkipPadding: 20,
+      },
+    }],
+    xAxes: [
+      {
+        display: false,
+      },
+    ]
+  },
+  tooltips: {
+    callbacks: {
+      title: (tooltipItems, data) => {
+        data
+        return dayjs.unix(tooltipItems[0].label).format('ddd D MMM h:mm a')
+      }
+    }
+  },
+  elements: {
+    line: {
+      borderColor: Charts.colors.theme['warning'],
+    },
+    point: {
+      backgroundColor: Charts.colors.theme['warning']
+    }
+  },
+};
+
+function tickLabelTime (label) {
+  return dayjs(label).format('h:mm a')
+}
+
+function tickLabelDay(label, index, all) {
+  const result = dayjs(label).format('ddd D MMM')
+  if (!all[index - 1]) {
+    return result
+  }
+  if (all[index - 1] && dayjs(label).isAfter(all[index - 1], 'day')) {
+    return result
+  }
+  return null
+}

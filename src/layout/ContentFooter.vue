@@ -3,23 +3,22 @@
     <div class="row align-items-center justify-content-lg-between">
       <div class="col-lg-6">
         <div class="copyright text-center text-lg-left text-muted">
-          © {{year}} <a href="https://www.creative-tim.com" class="font-weight-bold ml-1" target="_blank">Creative Tim</a> &
-          <a href="https://www.binarcode.com" class="font-weight-bold ml-1" target="_blank">Binar Code</a>
+          © {{year}} JB
         </div>
       </div>
       <div class="col-lg-6">
         <ul class="nav nav-footer justify-content-center justify-content-lg-end">
           <li class="nav-item">
-            <a href="https://www.creative-tim.com" class="nav-link" target="_blank">Creative Tim</a>
+            <a href="https://www.wunderground.com/dashboard/pws/ISYDNE193" class="nav-link" target="_blank">Weather Underground</a>
           </li>
           <li class="nav-item">
-            <a href="https://www.creative-tim.com/presentation" class="nav-link" target="_blank">About Us</a>
+            <a href="https://openweathermap.org/city/2205978" class="nav-link" target="_blank">OpenWeather</a>
           </li>
           <li class="nav-item">
-            <a href="http://blog.creative-tim.com" class="nav-link" target="_blank">Blog</a>
+            <a href="https://monitoring.solaredge.com/solaredge-web/p/site/509283" class="nav-link" target="_blank">SolarEdge</a>
           </li>
           <li class="nav-item">
-            <a href="https://www.creative-tim.com/license" class="nav-link" target="_blank">License</a>
+            <a href="https://www.tesla.com/en_AU/teslaaccount" class="nav-link" target="_blank">Tesla</a>
           </li>
         </ul>
       </div>

@@ -4,6 +4,8 @@ import DashboardLayout from '@/layout/DashboardLayout'
 import AuthLayout from '@/layout/AuthLayout'
 Vue.use(Router)
 
+let savedPositions = {}
+
 export default new Router({
   linkExactActiveClass: 'active',
   routes: [
@@ -31,15 +33,20 @@ export default new Router({
           component: () => import(/* webpackChunkName: "demo" */ './views/UserProfile.vue')
         },
         {
-          path: '/maps',
-          name: 'maps',
-          component: () => import(/* webpackChunkName: "demo" */ './views/Maps.vue')
+          path: '/tesla',
+          name: 'tesla',
+          component: () => import(/* webpackChunkName: "demo" */ './views/Tesla.vue')
         },
         {
           path: '/tables',
           name: 'tables',
           component: () => import(/* webpackChunkName: "demo" */ './views/Tables.vue')
-        }
+        },
+        {
+          path: '/weather',
+          name: 'weather',
+          component: () => import(/* webpackChunkName: "demo" */ './views/Weather.vue')
+        },
       ]
     },
     {
@@ -59,5 +66,20 @@ export default new Router({
         }
       ]
     }
-  ]
+  ],
+  scrollBehavior (to, from, savedPosition) {
+    savedPositions[from.name] = window.scrollY
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        if (savedPosition) {
+          resolve(savedPosition)
+        } else {
+          if (savedPositions[to.name]) {
+            resolve({ x: 0, y: savedPositions[to.name] })
+          }
+          resolve({ x: 0, y: 0 })
+        }
+      }, 200)
+    })
+  }
 })

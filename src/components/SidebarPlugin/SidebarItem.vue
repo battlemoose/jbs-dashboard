@@ -9,6 +9,7 @@
             <template>
                 <i :class="link.icon"></i>
                 <span class="nav-link-text">{{ link.name }}</span>
+                <span v-if="comingSoon" class="badge badge-primary ml-2">Coming soon</span>
             </template>
         </router-link>
     </li>
@@ -28,7 +29,8 @@
         },
         description:
           'Sidebar link. Can contain name, path, icon and other attributes. See examples for more info'
-      }
+      },
+      comingSoon: Boolean,
     },
     inject: {
       autoClose: {

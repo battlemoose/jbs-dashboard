@@ -1,6 +1,6 @@
 {
-  "name": "vue-argon-dashboard",
-  "short_name": "vue-argon-dashboard",
+  "name": "jbs-dashboard",
+  "short_name": "jbs-dashboard",
   "icons": [
     {
       "src": "./img/icons/android-chrome-192x192.png",
