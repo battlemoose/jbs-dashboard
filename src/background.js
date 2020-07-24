@@ -1,8 +1,9 @@
 'use strict'
 
-import { app, protocol, BrowserWindow } from 'electron' // , electron
+import { app, protocol, BrowserWindow, nativeTheme } from 'electron' // , electron
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
+import { autoUpdater } from 'electron-updater'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -13,6 +14,8 @@ let win
 protocol.registerSchemesAsPrivileged([
   { scheme: 'app', privileges: { secure: true, standard: true } }
 ])
+
+nativeTheme.themeSource = 'light'
 
 function createWindow() {
   app.commandLine.appendSwitch('disable-web-security');
@@ -27,6 +30,7 @@ function createWindow() {
       // webSecurity: false
     }
   })
+  win.maximize()
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
@@ -52,9 +56,9 @@ function createWindow() {
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== 'darwin') {
+  // if (process.platform !== 'darwin') {
     app.quit()
-  }
+  // }
 })
 
 app.on('activate', () => {
@@ -79,6 +83,16 @@ app.on('ready', async () => {
   }
   createWindow()
 })
+
+autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Personal access Token" }
+autoUpdater.autoDownload = true
+
+autoUpdater.setFeedURL({
+  provider: 'generic',
+  url: 'https://gitlab.com/hughblackall/jbs-dashboard/-/jobs/artifacts/master/raw/dist?job=build'
+})
+
+autoUpdater.checkForUpdates()
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

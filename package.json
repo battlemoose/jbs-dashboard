@@ -1,6 +1,6 @@
 {
   "name": "jbs-dashboard",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -10,9 +10,10 @@
     "electron:build": "vue-cli-service electron:build",
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
-    "postuninstall": "electron-builder install-app-deps"
+    "postuninstall": "electron-builder install-app-deps",
+    "electron:build-win": "electron-builder --win"
   },
-  "main": "background.js",
+  "main": "./src/background.js",
   "dependencies": {
     "axios": "^0.19.2",
     "bootstrap": "4.5.0",
@@ -21,6 +22,7 @@
     "chart.js": "2.9.3",
     "core-js": "3.6.5",
     "dayjs": "^1.8.29",
+    "electron-updater": "^4.3.1",
     "flatpickr": "4.6.3",
     "fs": "0.0.1-security",
     "nouislider": "14.6.0",
@@ -50,6 +52,15 @@
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
     "vue-cli-plugin-yaml": "^1.0.2",
     "vue-template-compiler": "2.6.11"
+  },
+  "build": {
+    "appId": "net.battlemoose.jbs-dashboard",
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://gitlab.com"
+      }
+    ]
   },
   "eslintConfig": {
     "root": true,

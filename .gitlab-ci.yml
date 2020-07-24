@@ -1,0 +1,16 @@
+image: electronuserland/builder:wine
+
+cache:
+  paths:
+    - node_modules/
+
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run electron:build-win
+  artifacts:
+    paths:
+      - dist/*.exe*
+      - dist/*.yml
+    expire_in: 1 month
