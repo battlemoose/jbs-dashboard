@@ -30,8 +30,9 @@ module.exports = {
         appId: 'net.battlemoose.jbs-dashboard',
         publish: [
           {
-            provider: 'generic',
-            url: 'https://hughblackall.gitlab.io'
+            provider: 'github',
+            repo: 'jbs-dashboard',
+            owner: 'battlemoose'
           }
         ],
         // win: {

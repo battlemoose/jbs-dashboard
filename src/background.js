@@ -4,7 +4,7 @@ import { app, protocol, BrowserWindow, nativeTheme } from 'electron' // , electr
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { autoUpdater } from 'electron-updater'
-import config from '../compile-config'
+// import config from '../compile-config'
 import log from 'electron-log'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
@@ -88,13 +88,13 @@ app.on('ready', async () => {
 
 log.transports.file.level = 'debug'
 autoUpdater.logger = log
-autoUpdater.requestHeaders = { 'PRIVATE-TOKEN': config.gitlabApiOptions.apiKey }
+// autoUpdater.requestHeaders = { 'PRIVATE-TOKEN': config.gitlabApiOptions.apiKey }
 autoUpdater.autoDownload = true
 
-autoUpdater.setFeedURL({
-  provider: 'generic',
-  url: 'https://hughblackall.gitlab.io/jbs-dashboard/'
-})
+// autoUpdater.setFeedURL({
+//   provider: 'generic',
+//   url: 'https://hughblackall.gitlab.io/jbs-dashboard/'
+// })
 
 autoUpdater.checkForUpdatesAndNotify()
 
