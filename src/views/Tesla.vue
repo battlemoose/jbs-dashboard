@@ -21,20 +21,43 @@
                                 :sub-title="`${tesla.vehicle.climate_state.inside_temp} °C`"
                                 :icon="`fa fa-fan ${tesla.vehicle.climate_state.is_climate_on && 'fa-spin'}`"
                                 class="mb-4 mb-xl-0"
+                                v-if="tesla.vehicle"
                     >
                         <template slot="footer">
                             <div class="text-nowrap">Climate {{tesla.vehicle.climate_state.is_climate_on ? 'on' : 'off'}}</div>
                             <span v-if="tesla.vehicle.climate_state.is_climate_on">
-                              <span class="text-primary text-nowrap mr-2"><i class="fa fa-temperature-high"></i> {{tesla.vehicle.climate_state.driver_temp_setting}} °C</span>
+                              <span class="text-primary text-nowrap mr-2"><i class="fa fa-temperature-high"></i> {{round(tesla.vehicle.climate_state.driver_temp_setting, 1)}} °C</span>
                               <span class="text-nowrap mr-3">driver</span>
-                              <span class="text-primary text-nowrap mr-2"><i class="fa fa-temperature-high"></i> {{tesla.vehicle.climate_state.passenger_temp_setting}} °C</span>
+                              <span class="text-primary text-nowrap mr-2"><i class="fa fa-temperature-high"></i> {{round(tesla.vehicle.climate_state.passenger_temp_setting, 1)}} °C</span>
                               <span class="text-nowrap">passenger</span>
                             </span>
-                            <div class="">
-                              <base-button class="mt-3" size="sm" type="primary" disabled>Actions coming soon</base-button>
+                            <div class="mt-1">
+                              <base-button class="mt-2" size="sm" type="primary" @click="climateStart" v-if="!tesla.vehicle.climate_state.is_climate_on" :disabled="climateLoading"><i class="fa fa-circle-notch fa-spin" v-if="climateLoading"></i> Climate on</base-button>
+                              <base-button class="mt-2" size="sm" type="primary" @click="climateStop" v-if="tesla.vehicle.climate_state.is_climate_on" :disabled="climateLoading"><i class="fa fa-circle-notch fa-spin" v-if="climateLoading"></i> Climate off</base-button>
+                              <base-button class="mt-2" size="sm" type="primary" @click="openTempsModal"> Set temps</base-button>
+                              <modal :show.sync="showTempsModal">
+                                <template slot="header">
+                                    <h5 class="modal-title">Set climate temperatures</h5>
+                                </template>
+                                <div class="px-sm-5">
+                                  <div class="d-flex">
+                                    <span><i class="fa fa-user mr-1"></i> Driver temperature</span> <span class="text-primary font-weight-bold ml-auto"><i class="fa fa-temperature-high"></i> {{round(driverTemp, 1)}} °C</span>
+                                  </div>
+                                  <base-slider v-model="driverTemp" :range="{min: tesla.vehicle.climate_state.min_avail_temp, max: tesla.vehicle.climate_state.max_avail_temp}" :options="{step: 0.5}"></base-slider>
+                                  <div class="d-flex mt-4">
+                                    <span><i class="far fa-user mr-1"></i> Passenger temperature</span> <span class="text-primary font-weight-bold ml-auto"><i class="fa fa-temperature-high"></i> {{round(passengerTemp, 1)}} °C</span>
+                                  </div>
+                                    <base-slider v-model="passengerTemp" :range="{min: tesla.vehicle.climate_state.min_avail_temp, max: tesla.vehicle.climate_state.max_avail_temp}" :options="{step: 0.5}"></base-slider>
+                                </div>
+                                <template slot="footer">
+                                    <base-button type="secondary" @click="showTempsModal = false">Close</base-button>
+                                    <base-button type="primary" @click="setClimateTemps">Set</base-button>
+                                </template>
+                              </modal>
                             </div>
                         </template>
                     </stats-card>
+                    <loading-card v-else></loading-card>
                 </div>
                 <div class="col-xl-3 col-lg-6">
                     <stats-card title="Status"
@@ -42,6 +65,7 @@
                                 :sub-title="`${tesla.vehicle.drive_state.speed || 0} km/h`"
                                 :icon="tesla.vehicle.vehicle_state.locked ? 'fa fa-lock' : 'fa fa-unlock'"
                                 class="mb-4 mb-xl-0"
+                                v-if="tesla.vehicle"
                     >
                         <template slot="footer">
                           <div v-if="tesla.vehicle.vehicle_state.locked">Locked</div><div v-else>Unlocked</div>
@@ -52,6 +76,7 @@
                             </div>
                         </template>
                     </stats-card>
+                    <loading-card v-else></loading-card>
                 </div>
             </div>
         </base-header>
@@ -74,6 +99,7 @@
 
   import TeslaBatteryStatsCard from '@/components/TeslaBatteryStatsCard'
   import SolarProductionStatsCard from '@/components/SolarProductionStatsCard'
+  import LoadingCard from '@/components/LoadingCard'
 
   import solaredgeWeb from '@/service/solaredge-web'
   import solaredgeApi from '@/service/solaredge-api'
@@ -82,6 +108,7 @@
     components: {
       TeslaBatteryStatsCard,
       SolarProductionStatsCard,
+      LoadingCard,
     },
     data () {
       return {
@@ -91,6 +118,43 @@
         solaredgeWeb,
         solaredgeApi,
         round,
+
+        climateLoading: false,
+        showTempsModal: false,
+        driverTemp: 22,
+        passengerTemp: 22,
+      }
+    },
+    methods: {
+      async climateStart() {
+        this.climateLoading = true
+        const result = await tesla.api.climateStartAsync(this.tesla.options)
+        this.climateLoading = false
+        if (result.result === true) {
+          tesla.vehicle.climate_state.is_climate_on = true
+        }
+      },
+      async climateStop() {
+        this.climateLoading = true
+        const result = await tesla.api.climateStopAsync(this.tesla.options)
+        this.climateLoading = false
+        if (result.result === true) {
+          tesla.vehicle.climate_state.is_climate_on = false
+        }
+      },
+      openTempsModal() {
+        this.showTempsModal = true
+        this.driverTemp = tesla.vehicle ? tesla.vehicle.climate_state.driver_temp_setting : 15
+        this.passengerTemp = tesla.vehicle ? tesla.vehicle.climate_state.passenger_temp_setting : 15
+      },
+      async setClimateTemps() {
+        this.showTempsModal = false
+        const result = await tesla.api.setTempsAsync(this.tesla.options, this.driverTemp, this.passengerTemp)
+        if (result.result === true) {
+          console.log('kadfshlpls', result)
+          tesla.vehicle.climate_state.driver_temp_setting = this.driverTemp
+          tesla.vehicle.climate_state.passenger_temp_setting = this.passengerTemp
+        }
       }
     },
     mounted() {
@@ -164,5 +228,9 @@
 
   export default vm
 </script>
+
 <style>
+.climate-input {
+  width: 50px !important;
+}
 </style>

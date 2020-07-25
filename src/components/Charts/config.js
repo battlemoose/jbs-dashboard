@@ -211,6 +211,7 @@ export let rainfallChartOptions = {
         },
         autoSkip: true,
         autoSkipPadding: 30,
+        min: 0,
       },
     }],
     xAxes: [

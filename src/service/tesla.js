@@ -47,13 +47,13 @@ export default {
 	},
 
 	async checkState() {
-		console.debug('checkState()');
+		console.debug('checkState()')
 		const { options } = this
 
 		let vehicle = await this.api.vehicleAsync(options)
 		console.debug(vehicle.state);
 		if (vehicle.state != 'online') {
-			console.debug(`Vehicle ${vehicle.vin} is not online, waking up`);
+			console.debug(`Vehicle ${vehicle.vin} is not online, waking up`)
 			vehicle = await this.api.wakeUpAsync(options)
 			console.debug(`Attempting to wake vehicle ${vehicle.vin}`)
 			console.debug(vehicle)

@@ -49,6 +49,7 @@ export default {
 			default: {
 				this.currentConditions = null
 				console.error('Error retrieving personal weather station data')
+				console.error(response)
 			}
 		}
 	},
@@ -66,6 +67,7 @@ export default {
 			default: {
 				this.hourly7DayConditions = null
 				console.error('Error retrieving personal weather station data')
+				console.error(response)
 			}
 		}
 	},
@@ -83,6 +85,7 @@ export default {
 			default: {
 				this.daily7DayConditions = null
 				console.error('Error retrieving personal weather station data')
+				console.error(response)
 			}
 		}
 	},
@@ -100,6 +103,7 @@ export default {
 			default: {
 				this.rapid1DayConditions = null
 				console.error('Error retrieving personal weather station data')
+				console.error(response)
 			}
 		}
 	},
