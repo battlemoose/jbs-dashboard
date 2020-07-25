@@ -54,15 +54,6 @@
     "vue-cli-plugin-yaml": "^1.0.2",
     "vue-template-compiler": "2.6.11"
   },
-  "build": {
-    "appId": "net.battlemoose.jbs-dashboard",
-    "publish": [
-      {
-        "provider": "generic",
-        "url": "https://gitlab.com"
-      }
-    ]
-  },
   "eslintConfig": {
     "root": true,
     "env": {

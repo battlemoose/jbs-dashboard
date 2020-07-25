@@ -1,8 +1,8 @@
 const webpack = require('webpack');
-const config = require('./compile-config')
+// const config = require('./compile-config')
 // const isProd = process.env.NODE_ENV === "production";
 
-process.env.VUE_APP_GOOGLE_API_KEY = config.googleApiOptions.apiKey
+process.env.VUE_APP_GOOGLE_API_KEY = 'XXX' // config.googleApiOptions.apiKey
 
 module.exports = {
   configureWebpack: {
@@ -24,20 +24,20 @@ module.exports = {
     // Enable CSS source maps.
     sourceMap: process.env.NODE_ENV !== 'production'
   },
-  // pluginOptions: {
-  //   electronBuilder: {
-  //     builderOptions: {
-  //       appId: 'net.battlemoose.jbs-dashboard',
-  //       publish: [
-  //         {
-  //           provider: 'generic',
-  //           url: 'https://hughblackall.gitlab.io'
-  //         }
-  //       ],
-  //       win: {
-  //         target: ['nsis', 'zip'],
-  //       },
-  //     }
-  //   }
-  // }
+  pluginOptions: {
+    electronBuilder: {
+      builderOptions: {
+        appId: 'net.battlemoose.jbs-dashboard',
+        publish: [
+          {
+            provider: 'generic',
+            url: 'https://hughblackall.gitlab.io'
+          }
+        ],
+        // win: {
+        //   target: ['nsis', 'zip'],
+        // },
+      }
+    }
+  }
 };
