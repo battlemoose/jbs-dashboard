@@ -3,7 +3,7 @@
     <div class="row align-items-center justify-content-lg-between">
       <div class="col-lg-6">
         <div class="copyright text-center text-lg-left text-muted">
-          © {{year}} JB
+          © {{year}} JB <span class="ml-2 text-primary">v{{version}}</span>
         </div>
       </div>
       <div class="col-lg-6">
@@ -29,7 +29,8 @@
 export default {
   data() {
     return {
-      year: new Date().getFullYear()
+      year: new Date().getFullYear(),
+      version: window.electron.remote.app.getVersion(),
     };
   }
 };

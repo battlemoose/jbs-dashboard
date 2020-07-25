@@ -6,6 +6,7 @@ import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { autoUpdater } from 'electron-updater'
 // import config from '../compile-config'
 import log from 'electron-log'
+const path = require('path')
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -29,7 +30,8 @@ function createWindow() {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: 'iframe', // 'iframe', // process.env.ELECTRON_NODE_INTEGRATION, // true,
-      // webSecurity: false
+      // webSecurity: false,
+      preload: path.join(__dirname, 'preload.js'),
     }
   })
   win.maximize()

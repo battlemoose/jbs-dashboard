@@ -1,8 +1,8 @@
 const webpack = require('webpack');
-// const config = require('./compile-config')
+const config = require('./compile-config')
 // const isProd = process.env.NODE_ENV === "production";
 
-process.env.VUE_APP_GOOGLE_API_KEY = 'XXX' // config.googleApiOptions.apiKey
+process.env.VUE_APP_GOOGLE_API_KEY = config.googleApiOptions.apiKey
 
 module.exports = {
   configureWebpack: {
@@ -38,7 +38,10 @@ module.exports = {
         // win: {
         //   target: ['nsis', 'zip'],
         // },
-      }
+      },
+      // nodeIntegration: true
+      // externals: ['electron', 'fs'],
+      preload: 'src/preload.js',
     }
   }
 };
