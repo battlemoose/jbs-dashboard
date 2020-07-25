@@ -24,17 +24,20 @@ module.exports = {
     // Enable CSS source maps.
     sourceMap: process.env.NODE_ENV !== 'production'
   },
-  pluginOptions: {
-    electronBuilder: {
-      builderOptions: {
-        appId: 'net.battlemoose.jbs-dashboard',
-        publish: [
-          {
-            provider: 'generic',
-            url: 'https://hughblackall.gitlab.io'
-          }
-        ]
-      }
-    }
-  }
+  // pluginOptions: {
+  //   electronBuilder: {
+  //     builderOptions: {
+  //       appId: 'net.battlemoose.jbs-dashboard',
+  //       publish: [
+  //         {
+  //           provider: 'generic',
+  //           url: 'https://hughblackall.gitlab.io'
+  //         }
+  //       ],
+  //       win: {
+  //         target: ['nsis', 'zip'],
+  //       },
+  //     }
+  //   }
+  // }
 };

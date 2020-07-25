@@ -1,6 +1,6 @@
 {
   "name": "jbs-dashboard",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -53,6 +53,15 @@
     "vue-cli-plugin-electron-builder": "~2.0.0-rc.4",
     "vue-cli-plugin-yaml": "^1.0.2",
     "vue-template-compiler": "2.6.11"
+  },
+  "build": {
+    "appId": "net.battlemoose.jbs-dashboard",
+    "publish": [
+      {
+        "provider": "generic",
+        "url": "https://gitlab.com"
+      }
+    ]
   },
   "eslintConfig": {
     "root": true,
