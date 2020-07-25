@@ -4,6 +4,8 @@ import { app, protocol, BrowserWindow, nativeTheme } from 'electron' // , electr
 import { createProtocol } from 'vue-cli-plugin-electron-builder/lib'
 import installExtension, { VUEJS_DEVTOOLS } from 'electron-devtools-installer'
 import { autoUpdater } from 'electron-updater'
+import config from '../compile-config'
+import log from 'electron-log'
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -84,15 +86,17 @@ app.on('ready', async () => {
   createWindow()
 })
 
-autoUpdater.requestHeaders = { "PRIVATE-TOKEN": "Personal access Token" }
+log.transports.file.level = 'debug'
+autoUpdater.logger = log
+autoUpdater.requestHeaders = { 'PRIVATE-TOKEN': config.gitlabApiOptions.apiKey }
 autoUpdater.autoDownload = true
 
 autoUpdater.setFeedURL({
   provider: 'generic',
-  url: 'https://gitlab.com/hughblackall/jbs-dashboard/-/jobs/artifacts/master/raw/dist?job=build'
+  url: 'https://hughblackall.gitlab.io/jbs-dashboard/'
 })
 
-autoUpdater.checkForUpdates()
+autoUpdater.checkForUpdatesAndNotify()
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

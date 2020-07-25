@@ -1,11 +1,12 @@
-image: electronuserland/builder:wine
-
 cache:
   paths:
     - node_modules/
 
 build:
   stage: build
+  image: electronuserland/builder:wine
+  only:
+    - master
   script:
     - npm install
     - npm run electron:build-win
@@ -14,3 +15,16 @@ build:
       - dist/*.exe*
       - dist/*.yml
     expire_in: 1 month
+
+pages:
+  stage: deploy
+  image: alpine:latest
+  only:
+    - master
+  dependencies:
+    - build
+  script:
+    - cp dist/*.exe* dist/*.yml public
+  artifacts:
+    paths:
+      - public
