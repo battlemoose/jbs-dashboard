@@ -149,9 +149,9 @@
       },
       async setClimateTemps() {
         this.showTempsModal = false
+        this.climateStart()
         const result = await tesla.api.setTempsAsync(this.tesla.options, this.driverTemp, this.passengerTemp)
         if (result.result === true) {
-          console.log('kadfshlpls', result)
           tesla.vehicle.climate_state.driver_temp_setting = this.driverTemp
           tesla.vehicle.climate_state.passenger_temp_setting = this.passengerTemp
         }
