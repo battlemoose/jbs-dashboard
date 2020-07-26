@@ -31,6 +31,15 @@
         <i class="fa fa-map-marker-alt"></i> {{tesla.locality}}
       </div>
 
+      <div v-if="showChargePortAction" class="mt-1">
+        <base-button class="mt-2" size="sm" type="danger" @click="openChargePort" v-if="!tesla.vehicle.charge_state.charge_port_door_open" :disabled="chargePortLoading">
+          <i class="fa fa-circle-notch fa-spin" v-if="chargePortLoading"></i> Open charge port
+        </base-button>
+        <base-button class="mt-2" size="sm" type="danger" @click="closeChargePort" v-if="tesla.vehicle.charge_state.charge_port_door_open" :disabled="chargePortLoading">
+          <i class="fa fa-circle-notch fa-spin" v-if="chargePortLoading"></i> Close charge port
+        </base-button>
+      </div>
+
     </template>
   </stats-card>
   <loading-card v-else class="mb-4 mb-xl-0"></loading-card>
@@ -54,13 +63,33 @@ export default {
     tesla: Object,
     title: String,
     showLocality: Boolean,
+    showChargePortAction: Boolean,
   },
   data() {
     return {
       round,
       milesToKms,
       locality: null,
+      chargePortLoading: false,
     }
+  },
+  methods: {
+    async openChargePort() {
+      this.chargePortLoading = true
+      const result = await this.tesla.api.openChargePortAsync(this.tesla.options)
+      this.chargePortLoading = false
+      if (result.result === true) {
+        this.tesla.vehicle.charge_state.charge_port_door_open = true
+      }
+    },
+    async closeChargePort() {
+      this.chargePortLoading = true
+      const result = await this.tesla.api.closeChargePortAsync(this.tesla.options)
+      this.chargePortLoading = false
+      if (result.result === true) {
+        this.tesla.vehicle.charge_state.charge_port_door_open = false
+      }
+    },
   },
   computed: {
     teslaTimeToFull() {
@@ -72,7 +101,7 @@ export default {
     },
     teslaIsCharging() {
       return this.tesla.vehicle !== null
-        ? this.tesla.vehicle.charge_state.charging_state == 'Charging'
+        ? this.tesla.vehicle.charge_state.charging_state == this.tesla.CHARGING_STATE_CHARGING
         : null
     },
     teslaBatteryColor() {
@@ -88,7 +117,7 @@ export default {
       } else {
         return 'success'
       }
-    }
+    },
   },
 }
 </script>

@@ -3,7 +3,7 @@ import config from '../../config'
 
 const UPDATE_DATA_INTERVAL = 3000
 const UPDATE_GEOCODE_INTERVAL = 60000
-const WAKE_UP_TIMEOUT = 15000
+const WAKE_UP_TIMEOUT = 30000
 // const CHECK_STATE_INTERVAL = 60000
 
 export default {
@@ -13,6 +13,9 @@ export default {
 
 	vehicle: null,
 	locality: null,
+
+	CHARGING_STATE_DISCONNECTED: 'Disconnected',
+	CHARGING_STATE_CHARGING: 'Charging',
 
 	async init() {
 		try {

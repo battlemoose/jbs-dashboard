@@ -5,7 +5,7 @@
             <!-- Card stats -->
             <div class="row">
                 <div class="col-xl-3 col-lg-6">
-                    <tesla-battery-stats-card title="Battery" :tesla="tesla"></tesla-battery-stats-card>
+                    <tesla-battery-stats-card title="Battery" :tesla="tesla" :showChargePortAction="true"></tesla-battery-stats-card>
                 </div>
                 <div class="col-xl-3 col-lg-6">
                     <solar-production-stats-card
@@ -128,7 +128,7 @@
     methods: {
       async climateStart() {
         this.climateLoading = true
-        const result = await tesla.api.climateStartAsync(this.tesla.options)
+        const result = await tesla.api.climateStartAsync(tesla.options)
         this.climateLoading = false
         if (result.result === true) {
           tesla.vehicle.climate_state.is_climate_on = true
@@ -136,7 +136,7 @@
       },
       async climateStop() {
         this.climateLoading = true
-        const result = await tesla.api.climateStopAsync(this.tesla.options)
+        const result = await tesla.api.climateStopAsync(tesla.options)
         this.climateLoading = false
         if (result.result === true) {
           tesla.vehicle.climate_state.is_climate_on = false
@@ -150,7 +150,7 @@
       async setClimateTemps() {
         this.showTempsModal = false
         this.climateStart()
-        const result = await tesla.api.setTempsAsync(this.tesla.options, this.driverTemp, this.passengerTemp)
+        const result = await tesla.api.setTempsAsync(tesla.options, this.driverTemp, this.passengerTemp)
         if (result.result === true) {
           tesla.vehicle.climate_state.driver_temp_setting = this.driverTemp
           tesla.vehicle.climate_state.passenger_temp_setting = this.passengerTemp
