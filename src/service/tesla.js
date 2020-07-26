@@ -3,6 +3,7 @@ import config from '../../config'
 
 const UPDATE_DATA_INTERVAL = 3000
 const UPDATE_GEOCODE_INTERVAL = 60000
+const WAKE_UP_TIMEOUT = 15000
 // const CHECK_STATE_INTERVAL = 60000
 
 export default {
@@ -14,18 +15,20 @@ export default {
 	locality: null,
 
 	async init() {
-		// TODO: Call checkState on an interval
-		// TODO: Fix check state and timeout issues
-		await this.checkState()
-		await this.getVehicleData()
-		setInterval(() => {
-			this.getVehicleData()
-		}, UPDATE_DATA_INTERVAL)
-		
-		await this.getGeocode()
-		setInterval(() => {
-			this.getGeocode()
-		}, UPDATE_GEOCODE_INTERVAL)
+		try {
+			await this.checkState()
+			await this.getVehicleData()
+			setInterval(() => {
+				this.getVehicleData()
+			}, UPDATE_DATA_INTERVAL)
+			
+			await this.getGeocode()
+			setInterval(() => {
+				this.getGeocode()
+			}, UPDATE_GEOCODE_INTERVAL)
+		} catch (error) {
+			console.error(error)
+		}
 	},
 
 	async login(username, password) {
@@ -52,14 +55,21 @@ export default {
 
 		let vehicle = await this.api.vehicleAsync(options)
 		console.debug(vehicle.state);
-		if (vehicle.state != 'online') {
+
+		let canceled = false
+		setTimeout(() => { canceled = true }, WAKE_UP_TIMEOUT);
+		while (vehicle.state != 'online' && !canceled) {
 			console.debug(`Vehicle ${vehicle.vin} is not online, waking up`)
 			vehicle = await this.api.wakeUpAsync(options)
-			console.debug(`Attempting to wake vehicle ${vehicle.vin}`)
+			console.debug(`Attempted to wake vehicle ${vehicle.vin}`)
 			console.debug(vehicle)
+			await delay(1000)
 		}
-
-		return vehicle
+		if (!canceled) {
+			return vehicle
+		} else {
+			throw Error(`Vehicle wake up timed out after ${WAKE_UP_TIMEOUT / 1000} seconds`)
+		}
 	},
 
 	async getVehicleData() {
@@ -83,4 +93,10 @@ export default {
 			})
 		}
 	}
+}
+
+async function delay(delay = 1000) {
+	await new Promise(resolve => {
+		setTimeout(() => { resolve() }, delay)
+	})
 }
