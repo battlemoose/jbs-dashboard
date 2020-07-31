@@ -193,6 +193,10 @@ export let blueChartOptions = {
       title: (tooltipItems, data) => {
         data
         return dayjs(tooltipItems[0].label).format('ddd D MMM h:mm a')
+      },
+      label: (tooltipItem, data) => {
+        data
+        return `${tooltipItem.value} °C`
       }
     }
   }
@@ -237,6 +241,10 @@ export let rainfallChartOptions = {
       title: (tooltipItems, data) => {
         data
         return dayjs(tooltipItems[0].label).format('ddd D MMM h:mm a')
+      },
+      label: (tooltipItem, data) => {
+        data
+        return `${tooltipItem.value} mm`
       }
     }
   },
@@ -593,6 +601,10 @@ export let forecastChartOptions = {
       title: (tooltipItems, data) => {
         data
         return dayjs.unix(tooltipItems[0].label).format('ddd D MMM h:mm a')
+      },
+      label: (tooltipItem, data) => {
+        data
+        return `${tooltipItem.value} °C`
       }
     }
   },

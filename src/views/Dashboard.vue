@@ -247,7 +247,7 @@
           activeIndex: 1,
           chartData: {
             datasets: [{
-              label: 'Temperature °C',
+              label: 'Temperature',
               data: wunderground.hourly7DayConditions !== null ? wunderground.hourly7DayConditions.map(observation => observation.metric.tempAvg) : null
             }],
             labels: wunderground.hourly7DayConditions !== null ? wunderground.hourly7DayConditions.map(observation => { return observation.obsTimeLocal }) : null
@@ -261,7 +261,7 @@
           activeIndex: 0,
           chartData: {
             datasets: [{
-              label: 'Temperature °C',
+              label: 'Temperature',
               data: wunderground.rapid1DayConditions !== null ? wunderground.rapid1DayConditions.map(observation => observation.metric.tempAvg) : null
             }],
             labels: wunderground.rapid1DayConditions !== null ? wunderground.rapid1DayConditions.map(observation => { return observation.obsTimeLocal }) : null
@@ -272,8 +272,8 @@
           chartData: {
             labels: wunderground.hourly7DayConditions !== null ? wunderground.hourly7DayConditions.map(observation => observation.obsTimeLocal) : null,
             datasets: [{
-              label: 'Precipitation mm/h',
-              data: wunderground.hourly7DayConditions !== null ? wunderground.hourly7DayConditions.map(observation => observation.metric.precipRate) : null
+              label: 'Precipitation',
+              data: wunderground.hourly7DayConditions !== null ? wunderground.hourly7DayConditions.map(observation => +round(observation.metric.precipAbs, 2)) : null
             }]
           },
           extraOptions: chartConfigs.rainfallChartOptions,
@@ -282,8 +282,8 @@
           chartData: {
             labels: wunderground.rapid1DayConditions !== null ? wunderground.rapid1DayConditions.map(observation => observation.obsTimeLocal) : null,
             datasets: [{
-              label: 'Precipitation mm/h',
-              data: wunderground.rapid1DayConditions !== null ? wunderground.rapid1DayConditions.map(observation => observation.metric.precipRate) : null
+              label: 'Precipitation',
+              data: wunderground.rapid1DayConditions !== null ? wunderground.rapid1DayConditions.map(observation => +round(observation.metric.precipAbs, 2)) : null
             }]
           },
           extraOptions: chartConfigs.rainfallChartOptions,

@@ -1,4 +1,5 @@
 // TODO: Convert requests to axios
+import * as dayjs from 'dayjs'
 import config from '../../config'
 
 const BASE_URL = 'https://api.weather.com/v2/pws'
@@ -61,6 +62,16 @@ export default {
 			case 200: {
 				const json = await response.json()
 				this.hourly7DayConditions = json.observations
+				// Calculate an absolute precipitation for the hour from cumulative total
+				this.hourly7DayConditions.forEach((hour, index, array) => {
+					if (array[index-1] == undefined
+						|| dayjs(hour.obsTimeLocal).date() != dayjs(array[index - 1].obsTimeLocal).date()) {
+						// Very first hour in 7 days or First hour of the day
+						hour.metric.precipAbs = hour.metric.precipTotal
+					} else {
+						hour.metric.precipAbs = hour.metric.precipTotal - array[index-1].metric.precipTotal
+					}
+				})
 				console.debug('Weather Underground hourly 7 day conditions', this.hourly7DayConditions)
 				break
 			}
@@ -97,6 +108,15 @@ export default {
 			case 200: {
 				const json = await response.json()
 				this.rapid1DayConditions = json.observations
+				// Calculate an absolute precipitation for the hour from cumulative total
+				this.rapid1DayConditions.forEach((hour, index, array) => {
+					if (array[index - 1] == undefined) {
+						// First hour of the day
+						hour.metric.precipAbs = hour.metric.precipTotal
+					} else {
+						hour.metric.precipAbs = hour.metric.precipTotal - array[index-1].metric.precipTotal
+					}
+				})
 				console.debug('Weather Underground rapid 1 day conditions', this.rapid1DayConditions)
 				break
 			}
