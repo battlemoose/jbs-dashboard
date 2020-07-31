@@ -73,6 +73,7 @@
         } else {
           gridConsumption = 0
         }
+        let householdConsumption = this.solaredgeWeb.currentPower.LOAD.currentPower - this.tesla.vehicle.charge_state.charger_power
 
         return [
           {
@@ -84,8 +85,8 @@
           },
           {
             name: 'Household',
-            power: this.solaredgeWeb.currentPower.LOAD.currentPower,
-            percentage: this.solaredgeWeb.currentPower.LOAD.currentPower / totalConsumption * 100,
+            power: householdConsumption,
+            percentage: householdConsumption / totalConsumption * 100,
             progressType: 'gradient-warning',
             indent: true,
             icon: 'fa fa-home fa-fw',
