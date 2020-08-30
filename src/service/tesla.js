@@ -1,15 +1,20 @@
 import teslajs from 'teslajs'
+import * as dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(duration)
+dayjs.extend(relativeTime)
 import config from '../../config'
-import { localStorageWrapper as ls } from '../app-utils'
+import { localStorageWrapper as ls, SET_TIMEOUT_MAX } from '../app-utils'
 
 const UPDATE_DATA_INTERVAL = 3000
 const UPDATE_GEOCODE_INTERVAL = 60000
 const WAKE_UP_TIMEOUT = 30000
 const TESLA_AUTH_TOKEN_KEY = 'tesla_auth_token'
 const TESLA_REFRESH_TOKEN_KEY = 'tesla_refresh_token'
+const TESLA_AUTH_TOKEN_EXPIRY_KEY = 'tesla_auth_token_expiry'
 // const CHECK_STATE_INTERVAL = 60000
 
-// TODO: Use refresh token if auth token expired
 const tesla = {
 
 	options: config.teslaOptions,
@@ -27,6 +32,7 @@ const tesla = {
 	async init() {
 		try {
 			this.checkLogin()
+			this.setTokenRefreshTime()
 			await this.checkState()
 			await this.getVehicleData()
 			setInterval(() => {
@@ -43,6 +49,7 @@ const tesla = {
 	},
 
 	async login(username, password) {
+		console.debug('tesla.login()')
 		this.loginLoading = true
 		this.loginError.error = false
 		this.loginError.message = ''
@@ -64,12 +71,9 @@ const tesla = {
 			this.loginLoading = false
 			throw new Error(`Unexpected status code: ${result.response.statusCode}`)
 		}
-		
+
 		if (result.authToken && result.refreshToken) {
-			this.options.authToken = result.authToken
-			this.options.refreshToken = result.refreshToken
-			ls.store(TESLA_AUTH_TOKEN_KEY, result.authToken)
-			ls.store(TESLA_REFRESH_TOKEN_KEY, result.refreshToken)
+			this.saveAuthTokens(result)
 			this.loggedIn = true
 			this.loginLoading = false
 			console.info('Logged in to Tesla API successfully')
@@ -81,9 +85,10 @@ const tesla = {
 	},
 
 	checkLogin() {
-		console.log('checkLogin()')
+		console.log('tesla.checkLogin()')
 		this.options.authToken = ls.retrieve(TESLA_AUTH_TOKEN_KEY)
 		this.options.refreshToken = ls.retrieve(TESLA_REFRESH_TOKEN_KEY)
+		this.options.authTokenExpiry = dayjs.unix(ls.retrieve(TESLA_AUTH_TOKEN_EXPIRY_KEY))
 		if (this.options.refreshToken === null) {
 			console.debug('Not logged in to Tesla account - refresh token not found')
 			this.loggedIn = false
@@ -91,8 +96,35 @@ const tesla = {
 		}
 	},
 
+	saveAuthTokens(result) {
+		this.options.authToken = result.authToken
+		this.options.refreshToken = result.refreshToken
+		this.options.authTokenExpiry = dayjs.unix(result.body.created_at + result.body.expires_in)
+		ls.store(TESLA_AUTH_TOKEN_KEY, result.authToken)
+		ls.store(TESLA_REFRESH_TOKEN_KEY, result.refreshToken)
+		ls.store(TESLA_AUTH_TOKEN_EXPIRY_KEY, this.options.authTokenExpiry.unix())
+	},
+
+	setTokenRefreshTime() {
+		console.log('tesla.setTokenRefreshTime()')
+		let time = this.options.authTokenExpiry.diff(dayjs())
+		if (time < SET_TIMEOUT_MAX) {
+			console.log(`Setting token refresh time to be ${dayjs.duration(time).humanize()}`)
+			setTimeout(() => {
+				this.refreshAuthToken()
+			}, time) // A negative diff will call the function immediately
+		}
+	},
+
+	async refreshAuthToken() {
+		console.debug('tesla.refreshAuthToken()')
+		const result = await this.api.refreshTokenAsync(this.options.refreshToken)
+		result.body = JSON.parse(result.body)
+		this.saveAuthTokens(result)
+	},
+
 	async checkState() {
-		console.debug('checkState()')
+		console.debug('tesla.checkState()')
 		const { options } = this
 
 		let vehicle = await this.api.vehicleAsync(options)

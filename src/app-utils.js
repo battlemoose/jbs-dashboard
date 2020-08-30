@@ -13,4 +13,6 @@ const localStorageWrapper = {
 	}
 }
 
-export { localStorageWrapper }
+const SET_TIMEOUT_MAX = 2147483647
+
+export { localStorageWrapper, SET_TIMEOUT_MAX }
